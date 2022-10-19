@@ -1,4 +1,5 @@
 <script>
+	// browser kann verwendet werden, um zu überprüfen ob die App im Browser läuft. Tei
 	import { browser } from '$app/environment';
 
 	// Speichert den aktuellen Input im Eingabefeld.
@@ -11,6 +12,7 @@
 	if (browser && localStorage.svelteTodos === undefined) {
 		localStorage.svelteTodos = JSON.stringify(todos); //speichern im lokalen Storage
 	} else if (browser) {
+		// Wenn wir uns im Browser befinden und es schon Todos im Localstorage gibt, dann werden die jetzt geladen.
 		todos = JSON.parse(localStorage.svelteTodos);
 	}
 
