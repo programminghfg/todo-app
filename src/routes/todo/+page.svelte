@@ -1,36 +1,48 @@
 <script>
 	import { browser } from '$app/environment';
 
+	// Speichert den aktuellen Input im Eingabefeld.
 	let inputValue = '';
 
+	// Alle Todos werden in diesem Array gespeichert.
 	let todos = [];
 
+	// Localstorage wird verwendet, um die Tasks im Browser zu speichern, sodass sie nicht verloren gehen beim Schließen der Website.
 	if (browser && localStorage.svelteTodos === undefined) {
 		localStorage.svelteTodos = JSON.stringify(todos); //speichern im lokalen Storage
 	} else if (browser) {
 		todos = JSON.parse(localStorage.svelteTodos);
 	}
 
+	// Todos hinzufügen
 	const addTodo = () => {
 		if (inputValue.length) {
 			todos.push({ text: inputValue, status: false });
 			todos = todos;
+			// Speichert die Todos im localStorage.
 			localStorage.svelteTodos = JSON.stringify(todos);
+			// Das Eingabefeld leeren.
 			inputValue = '';
 		}
 	};
 
+	// Todos lassen sich hiermit verändern und erneut abspeichern.
 	const changeTodo = () => {
 		localStorage.svelteTodos = JSON.stringify(todos);
 	};
 
+	// Todos können hiermit gelöscht werden.
 	const removeTodo = (e, searchElement) => {
+		// Die Position des richtigen Todo-Task finden.
 		const indexToDelete = todos.indexOf(searchElement);
+		// Anschließend den Task aus dem Todos-Array löschen.
 		todos.splice(indexToDelete, 1);
 		todos = todos;
+		// Änderungen auch im Localstorage abspeichern/aktualisieren.
 		localStorage.svelteTodos = JSON.stringify(todos);
 	};
 
+	// Wenn Enter gedrückt wird, wird ein neuer Todo-Task erstellt.
 	const enter = (key) => {
 		if (key.charCode === 13) {
 			addTodo();
@@ -38,16 +50,19 @@
 		}
 	};
 
+	// Aktualisiert automatisch die Anzahl der verbleibenden Todos.
 	$: remaining = todos.filter((t) => !t.status).length;
 </script>
 
 <div class="container">
 	<div class="heading">
 		<h1>Your todos</h1>
+		<!-- Zeigt die Anzahl der verbleibenden Todos an. -->
 		<p><em>{remaining}</em> remaining</p>
 	</div>
 
 	<div class="input">
+		<!-- Eingabefeld für Tasks. Werte werden in der Variable inputValue zwischengespeichert. -->
 		<input
 			class="input-todo"
 			type="text"
@@ -55,17 +70,23 @@
 			on:keypress={enter}
 			placeholder="Type something..."
 		/>
+		<!-- On click wird ein neuer Todo-Task hinzugefügt. -->
 		<button on:click={addTodo}>Add</button>
 	</div>
 	<ul>
+		<!-- Alle Todos aus dem Array werden hier gerendert. -->
 		{#each todos as todo, i}
+			<!-- Je nach Status des Tasks wird die .checked CSS Klasse angezeigt oder nicht. -->
 			<li class:checked={todo.status}>
+				<!-- Checkmark Häkchen, welches den Status des Tasks repräsentiert. -->
 				<input
 					type="checkbox"
 					bind:checked={todo.status}
 					on:click={(e) => (todo.status = !todo.status)}
 				/>
+				<!-- Textfeld, in welchem der Task-Text dargestellt wird oder man auch den Task aktualisieren kann. -->
 				<input class="text" bind:value={todo.text} on:change={changeTodo} />
+				<!-- Delete Button löscht den zugehörigen Task. -->
 				<button class="button-delete" on:click={(e) => removeTodo(e, todo)}>Delete</button>
 			</li>
 		{/each}
@@ -81,6 +102,7 @@
 		justify-content: space-between;
 		padding: 4px 8px;
 	}
+
 	.input-todo {
 		width: inherit;
 		border: none;

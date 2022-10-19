@@ -4,6 +4,7 @@
 
 <nav>
 	<ul>
+		<!-- Wenn der aktuelle Pfad mit dem Link übereinstimmt, wird dieser hervorgehoben in der Navigation. -->
 		<li><a href="/" class:active={$page.url.pathname === '/'}>Home</a></li>
 		<li><a href="/todo" class:active={$page.url.pathname === '/todo'}>Todo</a></li>
 	</ul>
@@ -19,6 +20,7 @@
 		list-style: none;
 		display: flex;
 		gap: 8px;
+		padding-left: 0;
 	}
 
 	.active {
