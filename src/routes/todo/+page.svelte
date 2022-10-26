@@ -1,6 +1,7 @@
 <script>
-	// browser kann verwendet werden, um zu überprüfen ob die App im Browser läuft. Tei
+	// browser kann verwendet werden, um zu überprüfen ob die App im Browser läuft.
 	import { browser } from '$app/environment';
+	import Button from '$lib/components/Button.svelte';
 
 	// Speichert den aktuellen Input im Eingabefeld.
 	let inputValue = '';
@@ -52,6 +53,11 @@
 		}
 	};
 
+	const deleteDone = () => {
+		todos = todos.filter((t) => !t.status);
+		localStorage.svelteTodos = JSON.stringify(todos);
+	};
+
 	// Aktualisiert automatisch die Anzahl der verbleibenden Todos.
 	$: remaining = todos.filter((t) => !t.status).length;
 </script>
@@ -59,6 +65,7 @@
 <div class="container">
 	<div class="heading">
 		<h1>Your todos</h1>
+		<button on:click={deleteDone}>Delete done</button>
 		<!-- Zeigt die Anzahl der verbleibenden Todos an. -->
 		<p><em>{remaining}</em> remaining</p>
 	</div>
@@ -94,12 +101,13 @@
 		{/each}
 	</ul>
 </div>
+<Button on:click={() => console.log('hi')} type="secondary">erster Button</Button>
 
 <style>
 	.input {
 		width: 100%;
 		display: flex;
-		gap: 12px;
+		gap: 8px;
 		align-items: center;
 		justify-content: space-between;
 		padding: 4px 8px;
@@ -114,8 +122,13 @@
 		outline: none;
 	}
 
+	h1 {
+		font-family: 'Open Sans';
+	}
+
 	.button-delete {
 		position: absolute;
+		font-family: 'Open Sans', sans-serif;
 		right: 0;
 		margin-right: 4px;
 	}
